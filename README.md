@@ -7,4 +7,4 @@ If you want see the game running, download the executable ROM c-version/plane.gb
 
 hardware.inc and original hello world file downloaded from http://gameboy.mongenel.com/asmschool.html
 
-![Screenshot](/img/plane.png)
+![Screenshot](/image/plane2x2.png)
