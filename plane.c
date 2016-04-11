@@ -54,32 +54,37 @@ void main(){
   int posy = 0x5F; // Y position of Mario's top left sprite
   UBYTE gamespeed = 15;
   UBYTE animate = 0;
-  UBYTE numbullets = 0;
+  UBYTE numbullets = 3;
   UBYTE i;
-  bullet cbullet;
   UBYTE cooldown_timer = 101;
 
+
   INIT();
-
-  //create_update_strings(posx,posy);
   move_plane(posx,posy);
-  move_sprite(4,0x0F,0x0F);
-  move_sprite(5,0x0F,0x1F);
-  move_sprite(6,0x0F,0x2F);
+  //XXX: Causes the screen to be stripes
+  // for(i = 0; i < numbullets; ++i){
+  //   bullet_ptr[i].spriteNum = 4+i;
+  //   bullet_ptr[i].posx = 0x0F;
+  //   bullet_ptr[i].posy = 0x0F + i*0x10;
+  //   move_sprite(bullet_ptr[i].spriteNum, bullet_ptr[i].posx, bullet_ptr[i].posy);
+  // }
 
-  //bullet *bullets = malloc(numbullets * sizeof(bullet));
+  // move_sprite(4,0x0F,0x0F);
+  // move_sprite(5,0x0F,0x1F);
+  // move_sprite(6,0x0F,0x2F);
+
 
   while(1){
       key = joypad();
-      for(i = 0; i < numbullets; i++){
-        cbullet.posy--;
-        move_sprite(cbullet.spriteNum, cbullet.posx,cbullet.posy );
-        if(cbullet.posy < 0x10){
-          free(cbullet);
-          numbullets--;
-        }
-
-      }
+      // for(i = 0; i < numbullets; i++){
+        // cbullet.posy--;
+        // move_sprite(cbullet.spriteNum, cbullet.posx,cbullet.posy );
+        // if(cbullet.posy < 0x10){
+        //   free(cbullet);
+        //   numbullets--;
+        // }
+      //
+      // }
 
       if(key & J_DOWN &&posy < 0x95 ){
         ++posy;
