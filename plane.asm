@@ -146,9 +146,13 @@ JOYPAD_VECT:
 	SECTION "Program Start",HOME[$0150]
 
 Start:
+
+  ld a, $01					;$01 enables v-blank interrupts
+  ld hl, $FFFF
+  ld [hl], a
+
 	di	              ;disable interrupts
 	ld	 sp,$FFFE	    ;set the stack to $FFFE
-	call WAIT_VBLANK	;wait for v-blank
 
 	ld	 a,0
 	ldh	 [rLCDC],a	  ;turn off LCD
@@ -163,9 +167,13 @@ Start:
 	ld	 a,%10010001	;  =$91
 	ldh	 [rLCDC],a	  ;turn on the LCD, BG, etc
 
+	ei								;enables interrupts
+
+
 Main:
-	halt
-  nop
+	halt  ;Stop system clock, return when interrupted
+	nop   ;line after halt will be run twice, nop protects for that
+
 	jp     Main
 
 ;******************************************************************************
@@ -174,21 +182,23 @@ Main:
 
 	SECTION "Support Routines",HOME
 
+; This was in the Hello World I downloaded, but it seems wasteful to check the
+; 	current scanline every CPU cycle.
 WAIT_VBLANK:
 	ldh	a,[rLY]		      ;get current scanline
 	cp	$91			        ;Are we in v-blank yet?
-	jr	nz,WAIT_VBLANK	;if A-91 != 0 then loop
+	jr	nz,WAIT_VBLANK	;do while A-91 != 0
 	ret
 
 CLEAR_MAP:
 	ld	hl,_SCRN0		;_SCRN0 = $9800, first point on screen
-	ld	bc,32*32		;counter for 32*32 tiles
-	ld	a,0			    ;load 0 into A (since our tile 0 is blank)
+	ld	bc,$3FF		;counter for 32*32 tiles
 CLEAR_MAP_LOOP:
+	ld	a,0			    ;load 0 into a (tile 0 is blank)
   ld	[hl+],a		  ;put tile 0 onto hl, increment hl
   dec	bc			    ;decrement tile counter
   ld	a,b
-  and	c
+  or	c
   jr	nz,CLEAR_MAP_LOOP ;if B or C != 0 then loop
   ret
 
