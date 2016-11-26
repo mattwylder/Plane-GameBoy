@@ -177,7 +177,8 @@ Main:
 	;there should be some logic here to check what interrupt was sent
 	;but since V-Blank is the only enabled interrupt, it doesn't matter now
 
-
+; I don't remember what this does, but the tiles don't appear on screen
+; if it's left uncommented
 ;	ld de, $0100
 ;	db $16, $16, $01, $00
 
@@ -235,6 +236,12 @@ LOAD_MAP_LOOP:
   dec	c             ;decrement tile counter
   jr	nz,LOAD_MAP_LOOP	;if tile counter != 0 then loop
   ret
+
+
+; I don't really remember what this is.
+; I think I was trying to refactor the logic for WAIT_VBLANK or something
+; Caused build error:
+;	     rgblink: Unable to to load fixed ROM0 section at $FF80
 
 ;SECTION	"Org ",HOME[$ff80]
 ;Vblank:
