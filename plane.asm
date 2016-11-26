@@ -13,7 +13,7 @@
 	INCLUDE	"inc/hardware.inc"
 
 	; project includes
-  INCLUDE "tile/plane_tile.asm"
+	INCLUDE "tile/plane_tile.asm"
 
 
 ;******************************************************************************
@@ -64,7 +64,7 @@ RST_38:
 
 	SECTION	"V-Blank IRQ Vector",HOME[$40]
 VBL_VECT:
-	jp Vblank
+	reti
 
 	SECTION	"LCD IRQ Vector",HOME[$48]
 LCD_VECT:
@@ -159,7 +159,7 @@ Start:
 
 	call CLEAR_MAP	  ;clear the BG map
 	call LOAD_TILES	  ;load up our tiles
-	;call LOAD_MAP	    ;load up our map
+	call LOAD_MAP	    ;load up our map
 
 	ld	 a,%11100100	;load a normal palette up 11 10 01 00 - dark->light
 	ldh	 [rBGP],a	    ;load the palette
@@ -178,8 +178,8 @@ Main:
 	;but since V-Blank is the only enabled interrupt, it doesn't matter now
 
 
-	ld de, $0100
-	db $16, $16, $01, $00
+;	ld de, $0100
+;	db $16, $16, $01, $00
 
 
 	jp     Main
@@ -236,17 +236,17 @@ LOAD_MAP_LOOP:
   jr	nz,LOAD_MAP_LOOP	;if tile counter != 0 then loop
   ret
 
-SECTION	"Org $ff80",HOME[$ff80]
-Vblank:
-		push af
-		ld a, [$0100]
-		ld [$ff46], a
-		ld a,$28
-Wait:
-		dec a
-		jr nz,Wait
-		pop af
-		reti
+;SECTION	"Org ",HOME[$ff80]
+;Vblank:
+;		push af
+;		ld a, [$0100]
+;		ld [$ff46], a
+;		ld a,$28
+;Wait:
+;		dec a
+;		jr nz,Wait
+;		pop af
+;		reti
 
 ;************************************************************
 ;* tile map
